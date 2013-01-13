@@ -8,12 +8,24 @@ var
   soundCloudDebugTrackPermalink = "https://soundcloud.com/openingceremony/showtunes-steve-j-yoni-p-ss13",
 
   init = function() {
+    var r = "Getings und Bajs";
+    if (document.querySelector("[src='"+soundCloudSDKURI+"']")) {
+      console.info("Already initialized");
+      return r;
+    }
+
     var sdkEl = document.createElement("script");
     sdkEl.src = soundCloudSDKURI;
     document.body.appendChild(sdkEl);
+    sdkEl.addEventListener("error", onSoundCloudSDKLoadError);
     sdkEl.addEventListener("load", onSoundCloudSDKLoad);
+
+    return r;
   },
 
+  onSoundCloudSDKLoadError = function() {
+    console.error("SDK Load Error: ", arguments);
+  },
   onSoundCloudSDKLoad = function() {
     var prepareSound = function(soundObj, callback) {
       if (!soundObj.track) {
